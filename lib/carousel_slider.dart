@@ -3,6 +3,8 @@ library carousel_slider;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+////// C:\flutter\.pub-cache\hosted\pub.dartlang.org\carousel_slider-0.0.7\lib
+//////  Chetan Added onScrolledPageGetIndex parameter to get index on scroll slider
 
 int _remander(int input, int source) {
   final int result = input % source;
@@ -17,6 +19,7 @@ int _getRealIndex(int position, int base, int length) {
 class CarouselSlider extends StatefulWidget {
   final List<Widget> items;
   final num viewportFraction;
+  final  ValueChanged<int> onScrolledPageGetIndex;
   final num initialPage;
   final double aspectRatio;
   final double height;
@@ -32,6 +35,7 @@ class CarouselSlider extends StatefulWidget {
   CarouselSlider({
     @required
     this.items,
+    this.onScrolledPageGetIndex,
     this.viewportFraction: 0.8,
     this.initialPage: 0,
     this.aspectRatio: 16/9,
@@ -121,6 +125,7 @@ class _CarouselSliderState extends State<CarouselSlider> with TickerProviderStat
       new PageView.builder(
         onPageChanged: (int index) {
           currentPage = _getRealIndex(index, widget.realPage, widget.items.length);
+          widget.onScrolledPageGetIndex(currentPage);
           if (widget.updateCallback != null) widget.updateCallback(currentPage);
         },
         controller: widget.pageController,
